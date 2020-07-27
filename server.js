@@ -34,33 +34,35 @@ this.longitude=data[0].lon;
 
 
 
-// localhost:3000/weather/?weather=time
+// localhost:3000/weather
 
 app.get('/weather', (request,response) =>{
-    var weather =request.query.forecast;
+    // var weather =request.query.forecast;
     var data2 =require('./data/weather.json');
+    data2.data.forEach(element =>{
+        var newWather = new Weather(element)
 
-    var newWather = new Weather(forecast, data2)
+    });
 
-    response.status(200).send(newWather);
+
+    response.status(200).send(arr);
 
 });
 
-
-function Weather(forecast,data2){
-    this.forcast=forecast;
-    this.time=data2.datetime;
+let arr=[];
+function Weather(data2){
+    this.forcast=data2.weather.description;
+    this.time=data2.valid_date;
+    arr.push(this);
     }
+    
     
 
 
 
 
 
-app.get('*', (request, response) => {
-    request.status(404).send('"Sorry, something went wrong"');
+app.all('*', (request, response) => {
+    request.status(500).send('"Sorry, something went wrong"');
 });
 
-app.use((error, request, response) => {
-    response.status(500).send(error);
-});
