@@ -65,102 +65,102 @@
 
 //lab7
 
-const express = require('express');
-const cors = require('cors');
-require('dotenv').config();
-const app = express();
-app.use(cors());
-const PORT = process.env.PORT || 3000
-//added for lab7 with installing it 
-const superagent = require('superagent');
+// const express = require('express');
+// const cors = require('cors');
+// require('dotenv').config();
+// const app = express();
+// app.use(cors());
+// const PORT = process.env.PORT || 3000
+// //added for lab7 with installing it 
+// const superagent = require('superagent');
 
 
 
 
 
-// //localhost:3000/location/?city=amman
-app.get('/location', (req, res) => {
-    //بدنا ناخدها من اللي بعبيها بال موقع 
-    let city = req.query.city;
-    //////added for lab7
+// // //localhost:3000/location/?city=amman
+// app.get('/location', (req, res) => {
+//     //بدنا ناخدها من اللي بعبيها بال موقع 
+//     let city = req.query.city;
+//     //////added for lab7
 
-    //from locationiq >> 1. your token  اول صفحة >>GEOCODE_API_KEY 2.API documentation here اول صفحة>> search forward GeoCoding باخد اي رابط تاع أمريكا او اوروبا وبعدل عليه  
-    let locationKey = process.env.GEOCODE_API_KEY;
-    let url = `https://eu1.locationiq.com/v1/search.php?key=${locationKey}&q=${city}&format=json`;
+//     //from locationiq >> 1. your token  اول صفحة >>GEOCODE_API_KEY 2.API documentation here اول صفحة>> search forward GeoCoding باخد اي رابط تاع أمريكا او اوروبا وبعدل عليه  
+//     let locationKey = process.env.GEOCODE_API_KEY;
+//     let url = `https://eu1.locationiq.com/v1/search.php?key=${locationKey}&q=${city}&format=json`;
 
-    //to get the data from the url
-    superagent.get(url)
-        .then(data => {
-            let newLocation = new Location(city, data.body);
-            res.status(200).send(newLocation);
-        });
+//     //to get the data from the url
+//     superagent.get(url)
+//         .then(data => {
+//             let newLocation = new Location(city, data.body);
+//             res.status(200).send(newLocation);
+//         });
 
-});
+// });
 
-// // Trello  ,,they want this when put localhost:3000/location/?city=amman
-// //مدخلات الكونستركتر ما قبل المساواة
-// // "search_query": "seattle",
-// // "formatted_query": "Seattle, WA, USA",
-// // "latitude": "47.606210",
-// // "longitude": "-122.332071"
+// // // Trello  ,,they want this when put localhost:3000/location/?city=amman
+// // //مدخلات الكونستركتر ما قبل المساواة
+// // // "search_query": "seattle",
+// // // "formatted_query": "Seattle, WA, USA",
+// // // "latitude": "47.606210",
+// // // "longitude": "-122.332071"
 
-// // ما بعد المساواة
-// //بروح على ال موقع location iq
-// // وبشوف الشكل كمان من Search forward Geocoding >> response
-// // https://locationiq.com/docs#forward-geocoding عاليمين
+// // // ما بعد المساواة
+// // //بروح على ال موقع location iq
+// // // وبشوف الشكل كمان من Search forward Geocoding >> response
+// // // https://locationiq.com/docs#forward-geocoding عاليمين
 
-// // لابعتهم للطقس والتريال
-var latitudee = [];
-var longitudee = [];
+// // // لابعتهم للطقس والتريال
+// var latitudee = [];
+// var longitudee = [];
 
-function Location(city, data) {
-    this.search_query = city;
-    this.formatted_query = data[0].display_name;
-    this.latitude = data[0].lat;
-    this.longitude = data[0].lon;
+// function Location(city, data) {
+//     this.search_query = city;
+//     this.formatted_query = data[0].display_name;
+//     this.latitude = data[0].lat;
+//     this.longitude = data[0].lon;
 
-    latitudee.push(this.latitude);
-    longitudee.push(this.longitude);
-}
-// // /////////to here
-
-
+//     latitudee.push(this.latitude);
+//     longitudee.push(this.longitude);
+// }
+// // // /////////to here
 
 
-// // //localhost:3000/weather بس بعد ما احط اللينك تاع اللوكيشن مهم 
-app.get('/weather', (request, response) => {
-
-//     /// من موقع www.weatherbit.io
-//     // من API keya adress
-
-    let weatherKey = process.env.WEATHER_API_KEY;
-    let url = `https://api.weatherbit.io/v2.0/forecast/daily?lat=${latitudee}&lon=${longitudee}&key=${weatherKey}`;
-
-    superagent.get(url)
-        .then(data2 => {
-            var dataOfweather = JSON.parse(data2.text).data;
-
-            dataOfweather.forEach(element => {
-
-                var newWather = new Weather(element);
-
-            });
-
-            response.status(200).json(arr);
-
-        });
 
 
-});
 
-let arr = [];
-function Weather(data2) {
-    //object inside object ,, then the poroperty
-    this.forcast = data2.weather.description;
-    //objecect inside it the property
-    this.time = data2.valid_date;
-    arr.push(this);
-}
+// //     /// من موقع www.weatherbit.io
+// //     // من API keya adress
+
+// http://localhost:3000/weather?lon=333&lat=4343
+// app.get('/weather', (request, response) => {
+//     let latitudee = request.query.lat;
+//     let longitudee = request.query.lon;
+    
+//         let weatherKey = process.env.WEATHER_API_KEY;
+//         let url = `https://api.weatherbit.io/v2.0/forecast/daily?lat=${latitudee}&lon=${longitudee}&key=${weatherKey}`;
+    
+//         superagent.get(url)
+//             .then(data2 => {
+//                 const weaherInfo=[];
+//                 data2.body.data.map(element => {
+//                     let newWather = new Weather(element);
+//                     weaherInfo.push(newWather);
+
+//                 });
+//                 response.send(weaherInfo);
+
+//             });
+//         });
+
+
+// let arr = [];
+// function Weather(data2) {
+//     //object inside object ,, then the poroperty
+//     this.forcast = data2.weather.description;
+//     //objecect inside it the property
+//     this.time = data2.valid_date;
+//     arr.push(this);
+// }
 
 
 
@@ -234,21 +234,96 @@ require('dotenv').config();
 const app = express();
 app.use(cors());
 const PORT = process.env.PORT || 3000
-//added for lab7 with installing it 
-const superagent = require('superagent');
-
 const pg =require('pg');
-const client = new pg.Client=new pg.Client.env.DATABASE_URL
+const superagent= require('superagent');
+const client = new pg.Client(process.env.DATABASE_URL);
+
+app.get('/location', (req, res) => {
+    let city = req.query.city;
+    let locationKey = process.env.GEOCODE_API_KEY;
+    let url = `https://eu1.locationiq.com/v1/search.php?key=${locationKey}&q=${city}&format=json`;
+
+    let selectSQL =`SELECT * FROM locations WHERE search_query=${city}`
+
+    client.query(selectSQL).then(result=>{
+if(result.rowCount){
+    res.send(result);
+}
+else{
+    superagent.get(url)
+    .then(data => {
+        let newLocation = new Location(city, data.body);
+        let queryValues=[newLocation.search_query,newLocation.formatted_query,newLocation.latitude,newLocation.longitude];
+let SQL=`INSERT INTO locations (search_query,formatted_query,latitude,longitude) VALUES ($1,$2,$3,$4)`;
+client.query(SQL,queryValues).then(result => { 
+    res.send(newLocation);
+
+});
+
+    });
+
+};
+
+});
+
+});
+
+
+// http://localhost:3000/weather?lon=333&lat=4343
+app.get('/weather', (request, response) => {
+    let latitudee = request.query.lat;
+    let longitudee = request.query.lon;
+    
+        let weatherKey = process.env.WEATHER_API_KEY;
+        let url = `https://api.weatherbit.io/v2.0/forecast/daily?lat=${latitudee}&lon=${longitudee}&key=${weatherKey}`;
+    
+        superagent.get(url)
+            .then(data2 => {
+                const weaherInfo=[];
+                data2.body.data.map(element => {
+                    let newWather = new Weather(element);
+                    weaherInfo.push(newWather);
+
+                });
+                response.send(weaherInfo);
+
+            });
+        });
+
+
+    let selectSQL =`SELECT * FROM locations WHERE lat=${latitude} & lon=${longitude}`;
+
+    client.query(selectSQL).then(result=>{
+if(result.rowCount){
+    res.send(result);
+}
+else{
+    superagent.get(url)
+    .then(data2 => {
+        const weaherInfo=[];
+        data2.body.data.map(element => {
+            let newWather = new Weather(element);
+            weaherInfo.push(newWather);
+let queryValues=[newWather.search_query,newWather.formatted_query,newLocation.latitude,newLocation.longitude];
+let SQL=`INSERT INTO locations (search_query,formatted_query,latitude,longitude) VALUES ($1,$2,$3,$4)`;
+client.query(SQL,queryValues).then(result => { 
+    response.send(weaherInfo);
+
+});
+
+    });
+
+};
+
+});
+
+});
 
 
 
+client.connect().then(() => {
 
- 
-client.connect().then(()=> {
     app.listen(PORT, () => {
         console.log('I am listning to port', PORT);
-    });
-    
-})
-
-let selectSQL =`SELECT * FROM locatiobs WHERE search_query`
+    }); 
+}); 
