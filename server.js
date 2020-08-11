@@ -269,7 +269,7 @@ client.query(SQL,queryValues).then(result => {
 });
 
 
-// http://localhost:3000/weather?lon=333&lat=4343
+// // http://localhost:3000/weather?lon=333&lat=4343
 app.get('/weather', (request, response) => {
     let latitudee = request.query.lat;
     let longitudee = request.query.lon;
@@ -291,7 +291,7 @@ app.get('/weather', (request, response) => {
         });
 
 
-    let selectSQL =`SELECT * FROM locations WHERE lat=${latitude} & lon=${longitude}`;
+    let selectSQL =`SELECT * FROM locations WHERE lat=${latitude} &lon=${longitude}`;
 
     client.query(selectSQL).then(result=>{
 if(result.rowCount){
@@ -313,9 +313,9 @@ client.query(SQL,queryValues).then(result => {
 
     });
 
-};
-
 });
+
+};
 
 });
 
